@@ -21,10 +21,7 @@ pnpm install ecies
 
 ```typescript
 import { ECIES } from '@icealtria/ecies';
-// or 
-// import { simpECIES } from '@icealtria/ecies';
 
-// Initialize ECIES
 const ecies = new ECIES();
 
 // Generate key pair
@@ -33,13 +30,16 @@ const privateKey = keyPair.getPrivateKey();
 const publicKey = keyPair.getPublicKey();
 
 // Encrypt message
-const message = Buffer.from("This is a secret message.");
+const message = Buffer.from("Hello world! 🌏");
 const encryptedData = ecies.encrypt(publicKey, message);
+
+console.log(encryptedData.toString('base64'))
+// BIexVy5zciKoxoo5w/8Caa/PJPuzWBiU9WrtY9f5x0PwyjXigfmklwqGwqUH7k7P5KlBOs5hCoMHc/vMOZtyyDG8yPx2djfPpgQ+5kpUdmtNCl+y82mCNoGAFpP7vrTcv14I8bqhbahXGGKNFPto0QnEqGOtMxm69JNm+N1BDkwMrhTFy9txXnL9fHyMYQ==
 
 // Decrypt message
 const decryptedMessage = ecies.decrypt(privateKey, encryptedData);
 console.log(decryptedMessage.toString());
-// This is a secret message.
+// Hello World! 🌍
 ```
 
 ## Implementation Details
