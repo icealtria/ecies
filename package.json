@@ -1,0 +1,64 @@
+{
+  "name": "ecies",
+  "version": "0.0.1",
+  "description": "",
+  "types": "dist/main.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/main.d.ts",
+        "default": "./dist/main.mjs"
+      },
+      "require": {
+        "types": "./dist/main.d.cts",
+        "default": "./dist/main.cjs"
+      },
+      "default": "./dist/main.mjs"
+    },
+    "./dist/*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "require": "./dist/*.cjs"
+    }
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc && tsup",
+    "dev": "tsx watch src/main.ts"
+  },
+  "author": {
+    "name": "icealtria",
+    "email": "icealtria@gmail.com",
+    "url": "https://github.com/icealtria"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    ""
+  ],
+  "homepage": "https://github.com/icealtria/ecies",
+  "bugs": {
+    "url": "https://github.com/icealtria/ecies/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/icealtria/ecies.git"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@noble/curves": "^1.8.0",
+    "@noble/ed25519": "^2.2.2",
+    "elliptic": "^6.6.1"
+  }
+}
