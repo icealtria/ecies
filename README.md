@@ -1,16 +1,12 @@
 # ECIES
 
-⚠️ **SECURITY WARNING** ⚠️
-
-This is an **experimental** implementation that has NOT undergone professional security audit. It is NOT recommended for production use or any application requiring guaranteed security. Use at your own risk.
-
 A lightweight TypeScript implementation of Elliptic Curve Integrated Encryption Scheme (ECIES) using Node.js's built-in `crypto` module.
 
 ## Features
 
 - Pure TypeScript implementation
 - Uses Node.js built-in `crypto` module
-- Zero external crypto dependencies
+- Zero external dependencies
 - Two implementations available:
   - Standard ECIES: Full implementation with all security features
   - Simplified ECIES: Minimalist implementation for smaller ciphertext size

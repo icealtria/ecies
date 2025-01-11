@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import { type CurveName } from './type'
+import { type CurveName } from './type';
 
 const KEY_LENGTH = 32;
 const IV_LENGTH = 12;
@@ -34,11 +34,7 @@ export class ECIES {
         const counter = Buffer.alloc(4);
         counter.writeUInt32BE(1, 0);
 
-        const input = Buffer.concat([
-            secret,
-            counter,
-        ]);
-
+        const input = Buffer.concat([secret, counter]);
         return crypto.createHash('sha256').update(input).digest();
     }
 
@@ -48,27 +44,27 @@ export class ECIES {
         return hmac.digest();
     }
 
-    public encrypt(
-        recipientPublicKey: Buffer,
-        message: Buffer
-    ): Buffer {
+    public encrypt(recipientPublicKey: Buffer, message: Buffer): Buffer {
         try {
             const ephemeralKeyPair = this.generateKeyPair();
             const ephemeralPublicKey = ephemeralKeyPair.getPublicKey();
-
             const sharedSecret = ephemeralKeyPair.computeSecret(recipientPublicKey);
-
             const { encryptionKey, macKey } = this.deriveKeys(sharedSecret);
-
+            
             const iv = crypto.randomBytes(IV_LENGTH);
+            const cipher = crypto.createCipheriv(
+                ALGORITHM,
+                encryptionKey,
+                iv,
+                { authTagLength: AUTH_TAG_LENGTH }
+            );
 
-            const cipher = crypto.createCipheriv(ALGORITHM, encryptionKey, iv, { authTagLength: AUTH_TAG_LENGTH });
             const ciphertext = Buffer.concat([
                 cipher.update(message),
                 cipher.final()
             ]);
+            
             const authTag = cipher.getAuthTag();
-
             const mac = this.computeMAC(macKey, Buffer.concat([ciphertext, authTag]));
 
             return Buffer.concat([
@@ -84,10 +80,7 @@ export class ECIES {
         }
     }
 
-    public decrypt(
-        privateKey: Buffer,
-        encryptedData: Buffer
-    ): Buffer {
+    public decrypt(privateKey: Buffer, encryptedData: Buffer): Buffer {
         try {
             const ecdh = crypto.createECDH(this.curveName);
             ecdh.setPrivateKey(privateKey);
@@ -105,7 +98,6 @@ export class ECIES {
             const ciphertext = encryptedData.subarray(offset, -MAC_LENGTH - AUTH_TAG_LENGTH);
 
             const sharedSecret = ecdh.computeSecret(ephemeralPublicKey);
-
             const { encryptionKey, macKey } = this.deriveKeys(sharedSecret);
 
             const computedMac = this.computeMAC(macKey, Buffer.concat([ciphertext, authTag]));
@@ -113,7 +105,12 @@ export class ECIES {
                 throw new Error('Invalid MAC');
             }
 
-            const decipher = crypto.createDecipheriv(ALGORITHM, encryptionKey, iv, { authTagLength: AUTH_TAG_LENGTH });
+            const decipher = crypto.createDecipheriv(
+                ALGORITHM,
+                encryptionKey,
+                iv,
+                { authTagLength: AUTH_TAG_LENGTH }
+            );
             decipher.setAuthTag(authTag);
 
             return Buffer.concat([
