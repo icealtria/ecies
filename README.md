@@ -1,36 +1,73 @@
-<!-- markdownlint-disable -->
+# ECIES
 
-<p align="center"><h1 align="center">
-  ecies
-</h1>
+⚠️ **SECURITY WARNING** ⚠️
 
-<p align="center">
-  
-</p>
+This is an **experimental** implementation that has NOT undergone professional security audit. It is NOT recommended for production use or any application requiring guaranteed security. Use at your own risk.
 
-<p align="center">
-  <a href="https://www.npmjs.org/package/ecies"><img src="https://badgen.net/npm/v/ecies" alt="npm version"/></a>
-  <a href="https://www.npmjs.org/package/ecies"><img src="https://badgen.net/npm/license/ecies" alt="license"/></a>
-  <a href="https://www.npmjs.org/package/ecies"><img src="https://badgen.net/npm/dt/ecies" alt="downloads"/></a>
-  <a href="https://github.com/icealtria/ecies/actions?workflow=CI"><img src="https://github.com/icealtria/ecies/workflows/CI/badge.svg" alt="build"/></a>
-  <a href="https://codecov.io/gh/icealtria/ecies"><img src="https://badgen.net/codecov/c/github/icealtria/ecies" alt="codecov"/></a>
-  <a href="https://snyk.io/test/github/icealtria/ecies"><img src="https://snyk.io/test/github/icealtria/ecies/badge.svg" alt="Known Vulnerabilities"/></a>
-  <a href="./SECURITY.md"><img src="https://img.shields.io/badge/Security-Responsible%20Disclosure-yellow.svg" alt="Responsible Disclosure Policy" /></a>
-</p>
+A lightweight TypeScript implementation of Elliptic Curve Integrated Encryption Scheme (ECIES) using Node.js's built-in `crypto` module.
 
-## Install
+## Features
+
+- Pure TypeScript implementation
+- Uses Node.js built-in `crypto` module
+- Zero external crypto dependencies
+- Two implementations available:
+  - Standard ECIES: Full implementation with all security features
+  - Simplified ECIES: Minimalist implementation for smaller ciphertext size
+
+## Installation
 
 ```bash
-
-```
-## Usage: CLI
-
-```bash
-// @TODO
-const {} = require('ecies')
+pnpm install ecies
 ```
 
+## Usage
 
-## Author
+```typescript
+import { ECIES } from '@icealtria/ecies';
+// or 
+// import { simpECIES } from '@icealtria/ecies';
 
-**ecies** © [icealtria](https://github.com/icealtria), Released under the [Apache-2.0](./LICENSE) License.
+// Initialize ECIES
+const ecies = new ECIES();
+
+// Generate key pair
+const keyPair = ecies.generateKeyPair();
+const privateKey = keyPair.getPrivateKey();
+const publicKey = keyPair.getPublicKey();
+
+// Encrypt message
+const message = Buffer.from("This is a secret message.");
+const encryptedData = ecies.encrypt(publicKey, message);
+
+// Decrypt message
+const decryptedMessage = ecies.decrypt(privateKey, encryptedData);
+console.log(decryptedMessage.toString());
+// This is a secret message.
+```
+
+## Implementation Details
+
+### Standard ECIES
+Standard implementation with complete security features.
+
+### Simplified ECIES
+`simpECIES` is a minimalist implementation optimized for smaller ciphertext size. Note: this trades some security features for size reduction.
+
+## API Reference
+
+### ECIES Class
+
+- `generateKeyPair()`: Generates a new key pair
+- `encrypt(publicKey, message)`: Encrypts a message using recipient's public key
+- `decrypt(privateKey, encryptedData)`: Decrypts message using recipient's private key
+
+### simpECIES Class
+
+- `generateKeyPair()`: Generates a new key pair
+- `encrypt(publicKey, message)`: Encrypts a message using recipient's public key
+- `decrypt(privateKey, encryptedData)`: Decrypts message using recipient's private key
+
+## License
+
+MIT
