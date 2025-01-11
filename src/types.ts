@@ -1,1 +1,0 @@
-export type CurveName = 'secp256k1' | 'prime256v1' | 'secp384r1' | 'secp521r1' | 'SM2' | 'brainpoolP160r1' | 'brainpoolP192r1' | 'secp112r2'
