@@ -1,18 +1,16 @@
 {
   "name": "@icealtria/ecies",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "ECIES encryption implementation for Node.js",
-  "types": "dist/main.d.ts",
   "type": "module",
-  "engines": {
-    "node": ">=22.0.0"
-  },
-  "main": "dist/main.js",
+  "main": "dist/main.cjs",
+  "module": "dist/main.mjs",
+  "types": "dist/main.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "test": "tsx test.ts"
   },
   "author": {
@@ -33,8 +31,9 @@
     "url": "https://github.com/icealtria/ecies.git"
   },
   "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsup": "^8.3.5",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3",
-    "@types/node": "^22.10.5"
+    "typescript": "^5.7.3"
   }
 }

@@ -83,4 +83,4 @@ const curves = [
     'wap-wsg-idm-ecid-wtls9'
 ] as const;
 
-type CurveName = typeof curves[number];
+export type CurveName = typeof curves[number];

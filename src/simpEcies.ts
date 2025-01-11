@@ -1,4 +1,6 @@
 import * as crypto from "crypto";
+import { type CurveName } from './type'
+
 
 const KEY_LENGTH = 32;
 const IV_LENGTH = 12;
