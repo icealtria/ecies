@@ -1,4 +1,4 @@
-[
+const curves = [
     'Oakley-EC2N-3',
     'Oakley-EC2N-4',
     'SM2',
@@ -81,4 +81,6 @@
     'wap-wsg-idm-ecid-wtls7',
     'wap-wsg-idm-ecid-wtls8',
     'wap-wsg-idm-ecid-wtls9'
-]
+] as const;
+
+type CurveName = typeof curves[number];

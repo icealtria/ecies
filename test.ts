@@ -1,30 +1,34 @@
-import { ECIES } from "./src/main";
+import assert from "assert";
+import { ECIES, simpECIES } from "./src/main";
 
-import * as assert from 'assert';
-
-// Test case 1: Basic encryption and decryption test
 function testBasicEncryptionDecryption() {
     const ecies = new ECIES();
-
-    // Generate key pairs
     const recipientKeyPair = ecies.generateKeyPair();
     const privateKey = recipientKeyPair.getPrivateKey();
     const publicKey = recipientKeyPair.getPublicKey();
-
-    // Sample message to encrypt
     const message = Buffer.from("This is a secret message.");
 
-    // Encrypt message
     const encryptedData = ecies.encrypt(publicKey, message);
-
-    // Decrypt message
     const decryptedMessage = ecies.decrypt(privateKey, encryptedData);
 
-    // Verify that the decrypted message matches the original message
     assert.deepStrictEqual(decryptedMessage, message, "Decrypted message does not match the original message");
 }
 
+function testSimpEncryptionDecryption() {
+    const simpEcies = new simpECIES('SM2');
+    const recipientKeyPair = simpEcies.generateKeyPair();
+    const privateKey = recipientKeyPair.getPrivateKey();
+    const publicKey = recipientKeyPair.getPublicKey();
+    const message = Buffer.from("This is a secret message.");
+
+    const encryptedData = simpEcies.encrypt(publicKey, message);
+    const decryptedMessage = simpEcies.decrypt(privateKey, encryptedData);
+
+    assert.deepStrictEqual(decryptedMessage, message, "Decrypted message does not match the original message");
+}
 
 testBasicEncryptionDecryption();
+
+testSimpEncryptionDecryption();
 
 console.log("All tests passed.");
