@@ -1,17 +1,61 @@
 {
-  "name": "eciesenc",
-  "version": "1.0.0",
+  "name": "ecies",
+  "version": "0.0.1",
   "description": "",
-  "scripts": {
-    "dev": "tsx watch src/main.ts"
+  "types": "dist/main.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/main.d.ts",
+        "default": "./dist/main.mjs"
+      },
+      "require": {
+        "types": "./dist/main.d.cts",
+        "default": "./dist/main.cjs"
+      },
+      "default": "./dist/main.mjs"
+    },
+    "./dist/*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "require": "./dist/*.cjs"
+    }
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc && tsup",
+    "dev": "tsx watch src/main.ts",
+    "test": "tsx test.ts"
+  },
+  "author": {
+    "name": "icealtria",
+    "email": "icealtria@gmail.com",
+    "url": "https://github.com/icealtria"
+  },
+  "license": "MPL",
+  "keywords": [
+    ""
+  ],
+  "homepage": "https://github.com/icealtria/ecies",
+  "bugs": {
+    "url": "https://github.com/icealtria/ecies/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/icealtria/ecies.git"
+  },
   "devDependencies": {
-    "@types/node": "^22.10.5",
+    "@types/node": "^20.14.10",
     "tsup": "^8.3.5",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3"
-  }
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {}
 }
