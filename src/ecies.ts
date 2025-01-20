@@ -21,8 +21,8 @@ export class ECIES {
         return keyPair;
     }
 
-    private deriveKeys(sharedSecret: Buffer) {
-        const kdfOutput = this.kdf(sharedSecret);
+    private deriveKeys(sharedSecret: Buffer): { encryptionKey: Buffer, macKey: Buffer } {
+        const kdfOutput = this.hkdf(sharedSecret);
 
         return {
             encryptionKey: kdfOutput.subarray(0, KEY_LENGTH),
@@ -30,12 +30,11 @@ export class ECIES {
         };
     }
 
-    private kdf(secret: Buffer): Buffer {
-        const counter = Buffer.alloc(4);
-        counter.writeUInt32BE(1, 0);
+    private hkdf(secret: Buffer): Buffer {
+        const salt = Buffer.alloc(0);
+        const info = Buffer.alloc(0);
 
-        const input = Buffer.concat([secret, counter]);
-        return crypto.createHash('sha256').update(input).digest();
+        return Buffer.from(crypto.hkdfSync('sha256', secret, salt, info, KEY_LENGTH + MAC_KEY_LENGTH));
     }
 
     private computeMAC(macKey: Buffer, ciphertext: Buffer): Buffer {
@@ -50,7 +49,7 @@ export class ECIES {
             const ephemeralPublicKey = ephemeralKeyPair.getPublicKey();
             const sharedSecret = ephemeralKeyPair.computeSecret(recipientPublicKey);
             const { encryptionKey, macKey } = this.deriveKeys(sharedSecret);
-            
+
             const iv = crypto.randomBytes(IV_LENGTH);
             const cipher = crypto.createCipheriv(
                 ALGORITHM,
@@ -63,7 +62,7 @@ export class ECIES {
                 cipher.update(message),
                 cipher.final()
             ]);
-            
+
             const authTag = cipher.getAuthTag();
             const mac = this.computeMAC(macKey, Buffer.concat([ciphertext, authTag]));
 

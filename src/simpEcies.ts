@@ -35,18 +35,18 @@ export class simpECIES {
             const ephemeralKeyPair = this.generateKeyPair();
             const ephemeralPublicKey = ephemeralKeyPair.getPublicKey();
             const sharedSecret = ephemeralKeyPair.computeSecret(recipientPublicKey);
-            
+
             const { encryptionKey, iv } = this.deriveKeys(sharedSecret);
 
             const cipher = crypto.createCipheriv(
-                ALGORITHM, 
-                encryptionKey, 
-                iv, 
+                ALGORITHM,
+                encryptionKey,
+                iv,
                 { authTagLength: AUTH_TAG_LENGTH }
             );
-            
+
             const ciphertext = Buffer.concat([
-                cipher.update(message), 
+                cipher.update(message),
                 cipher.final()
             ]);
             const authTag = cipher.getAuthTag();
@@ -76,9 +76,9 @@ export class simpECIES {
             const { encryptionKey, iv } = this.deriveKeys(sharedSecret);
 
             const decipher = crypto.createDecipheriv(
-                ALGORITHM, 
-                encryptionKey, 
-                iv, 
+                ALGORITHM,
+                encryptionKey,
+                iv,
                 { authTagLength: AUTH_TAG_LENGTH }
             );
             decipher.setAuthTag(authTag);
