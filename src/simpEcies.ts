@@ -33,7 +33,7 @@ export class simpECIES {
     public encrypt(recipientPublicKey: Buffer, message: Buffer): Buffer {
         try {
             const ephemeralKeyPair = this.generateKeyPair();
-            const ephemeralPublicKey = ephemeralKeyPair.getPublicKey();
+            const ephemeralPublicKey = ephemeralKeyPair.getPublicKey(undefined, 'compressed');
             const sharedSecret = ephemeralKeyPair.computeSecret(recipientPublicKey);
 
             const { encryptionKey, iv } = this.deriveKeys(sharedSecret);
@@ -67,7 +67,7 @@ export class simpECIES {
             const ecdh = crypto.createECDH(this.curveName);
             ecdh.setPrivateKey(privateKey);
 
-            let offset = ecdh.getPublicKey().byteLength;
+            let offset = ecdh.getPublicKey(undefined, 'compressed').byteLength;
             const ephemeralPublicKey = encryptedData.subarray(0, offset);
             const authTag = encryptedData.subarray(offset, offset + AUTH_TAG_LENGTH);
             const ciphertext = encryptedData.subarray(offset + AUTH_TAG_LENGTH);

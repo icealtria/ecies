@@ -28,7 +28,7 @@ export class ECIES {
     public encrypt(recipientPublicKey: Buffer, message: Buffer): Buffer {
         try {
             const ephemeralKeyPair = this.generateKeyPair();
-            const ephemeralPublicKey = ephemeralKeyPair.getPublicKey();
+            const ephemeralPublicKey = ephemeralKeyPair.getPublicKey(undefined, 'compressed');
             const sharedSecret = ephemeralKeyPair.computeSecret(recipientPublicKey);
             const encryptionKey = this.deriveKeys(sharedSecret, ephemeralPublicKey);
 
@@ -65,7 +65,7 @@ export class ECIES {
             ecdh.setPrivateKey(privateKey);
 
             let offset = 0;
-            const ephemPubKeyLength = ecdh.getPublicKey().length;
+            const ephemPubKeyLength = ecdh.getPublicKey(undefined, 'compressed').length;
             const ephemeralPublicKey = encryptedData.subarray(offset, offset + ephemPubKeyLength);
             offset += ephemPubKeyLength;
 
